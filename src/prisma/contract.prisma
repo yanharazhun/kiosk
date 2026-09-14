@@ -1,0 +1,32 @@
+// use prisma-8
+
+model Group {
+  id        String   @id @default(uuid())
+  name      Json
+  sortOrder Int
+  isActive  Boolean
+  imageUrl  String?
+  createdAt TimestamptzString @default(now())
+
+  parentGroupId String?
+  parent        Group?    @relation("GroupHierarchy", fields: [parentGroupId], references: [id], onDelete: SetNull)
+  subGroups     Group[]   @relation("GroupHierarchy")
+  products      Product[] @relation("GroupProducts")
+
+  @@index([parentGroupId])
+}
+
+model Product {
+  id      String  @id @default(uuid())
+  name    Json
+  groupId String?
+
+  group Group? @relation("GroupProducts", fields: [groupId], references: [id], onDelete: SetNull)
+
+  sortOrder Int
+  isActive  Boolean
+  imageUrl  String?
+  createdAt TimestamptzString @default(now())
+
+  @@index([groupId])
+}
