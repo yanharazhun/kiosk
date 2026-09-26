@@ -1,3 +1,4 @@
-@import "tailwindcss";
-@import "../styles/fonts.css";
+@layer reset, base;
+
 @import "../styles/reset.css";
+@import "../styles/fonts.css";

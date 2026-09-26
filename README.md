@@ -2,7 +2,7 @@
 
 Full-stack portfolio project: a restaurant self-service kiosk with a kitchen display and an admin panel.
 
-**Stack:** Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · Prisma 7 · PostgreSQL 17 (Docker)
+**Stack:** Next.js 16 (App Router) · TypeScript · CSS Modules · Prisma 7 · PostgreSQL 17 (Docker)
 
 ## Getting started
 
