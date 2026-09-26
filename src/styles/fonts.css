@@ -1,0 +1,4 @@
+@theme inline {
+  --font-sans: var(--font-instrument-sans), "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-bricolage), Georgia, sans-serif;
+}
