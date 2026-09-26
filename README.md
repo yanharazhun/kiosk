@@ -25,7 +25,3 @@ npm run dev               # http://localhost:3000
 | `db:migrate` | Create + apply a migration from schema changes |
 | `db:generate` | Regenerate the Prisma client |
 | `db:studio` | Browse the DB in Prisma Studio |
-
-## Docs
-
-Learning notes and design decisions live in [`docs/`](./docs/README.md).
