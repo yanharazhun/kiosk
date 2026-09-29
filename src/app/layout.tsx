@@ -3,7 +3,7 @@ import { fontDisplay, fontSans } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Demo Kiosk",
+  title: "Ember & Bun Kiosk",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
