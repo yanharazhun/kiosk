@@ -1,0 +1,26 @@
+.viewport {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--color-ink);
+}
+
+.frame {
+  position: relative;
+  flex-shrink: 0;
+  width: 1080px;
+  height: 1920px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-bg);
+  transform: scale(var(--kiosk-scale));
+  visibility: hidden;
+}
+
+.frame[data-ready="true"] {
+  visibility: visible;
+}
