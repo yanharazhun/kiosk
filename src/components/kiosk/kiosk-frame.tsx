@@ -22,7 +22,11 @@ function getServerScale() {
   return 0;
 }
 
-export function KioskFrame({ children }: { children: ReactNode }) {
+type KioskFrameProps = {
+  children: ReactNode;
+};
+
+export function KioskFrame({ children }: KioskFrameProps) {
   const scale = useSyncExternalStore(subscribe, getScale, getServerScale);
 
   return (

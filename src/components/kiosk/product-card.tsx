@@ -6,20 +6,19 @@ import { formatPrice } from "@/lib/money";
 import { PlusIcon } from "./icons";
 import styles from "./product-card.module.css";
 
-export function ProductCard({
-  product,
-  locale,
-  photoLabel,
-}: {
+type ProductCardProps = {
   product: MenuProduct;
   locale: Locale;
   photoLabel: string;
-}) {
+  onSelect: () => void;
+};
+
+export function ProductCard({ product, locale, photoLabel, onSelect }: ProductCardProps) {
   const name = localize(product.name, locale);
 
   return (
-    <article className={styles.card}>
-      <div className={styles.media}>
+    <button type="button" className={styles.card} onClick={onSelect}>
+      <span className={styles.media}>
         {product.imageUrl ? (
           <Image className={styles.image} src={product.imageUrl} alt="" fill sizes="400px" />
         ) : (
@@ -30,23 +29,23 @@ export function ProductCard({
             </span>
           </>
         )}
-      </div>
-      <div className={styles.body}>
-        <h3 className={styles.name}>{name}</h3>
+      </span>
+      <span className={styles.body}>
+        <span className={styles.name}>{name}</span>
         {product.description && (
-          <p className={styles.description}>
+          <span className={styles.description}>
             {localize(product.description, locale)}
-          </p>
+          </span>
         )}
-        <div className={styles.footer}>
+        <span className={styles.footer}>
           <span className={styles.price}>
             {formatPrice(product.priceMinor, locale)}
           </span>
           <span className={styles.add} aria-hidden="true">
             <PlusIcon size={34} />
           </span>
-        </div>
-      </div>
-    </article>
+        </span>
+      </span>
+    </button>
   );
 }

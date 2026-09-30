@@ -5,13 +5,12 @@ import styles from "./error.module.css";
 
 const RETRY_DELAYS_SECONDS = [5, 10, 30, 60];
 
-export default function KioskError({
-  error,
-  retry,
-}: {
+type KioskErrorProps = {
   error: Error & { digest?: string };
   retry: () => void;
-}) {
+};
+
+export default function KioskError({ error, retry }: KioskErrorProps) {
   const [attempt, setAttempt] = useState(0);
   const delay =
     RETRY_DELAYS_SECONDS[Math.min(attempt, RETRY_DELAYS_SECONDS.length - 1)];

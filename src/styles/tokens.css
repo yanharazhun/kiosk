@@ -6,10 +6,17 @@
     --color-ink-muted: #5e554a;
     --color-line: #e2d5c1;
     --color-brand: #c23b1e;
+    --color-brand-tint: #fbe1d6;
     --color-accent: #f0b429;
     --color-mint: #bcd6c3;
+    --color-track: #b5a792;
     --color-on-dark-muted: #cfc4b4;
     --color-focus: #1d5fd1;
+
+    /* Product photos: one shape for the card and the sheet.
+       Cut-out photos on a plain background → contain; full-bleed photos → cover. */
+    --photo-ratio: 36 / 25;
+    --photo-fit: cover;
   }
 
   body {

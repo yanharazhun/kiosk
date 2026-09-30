@@ -18,6 +18,15 @@ const en = {
   emptyOrderHint: "Tap any item to add it",
   emptyMenu: "Nothing on the menu right now",
   photo: "Photo",
+  makeItMeal: "Make it a meal",
+  mealHint: (price: string) => `With a side and a drink · +${price}`,
+  addExtras: "Add extras",
+  leaveOff: "Leave something off",
+  without: (name: string) => `No ${name.toLowerCase()}`,
+  addToOrder: "Add to order",
+  close: "Close",
+  decreaseQuantity: "Decrease quantity",
+  increaseQuantity: "Increase quantity",
 };
 
 type Messages = typeof en;
@@ -40,6 +49,15 @@ const da: Messages = {
   emptyOrderHint: "Tryk på en vare for at tilføje den",
   emptyMenu: "Der er intet på menuen lige nu",
   photo: "Foto",
+  makeItMeal: "Gør det til en menu",
+  mealHint: (price: string) => `Med tilbehør og drik · +${price}`,
+  addExtras: "Tilføj ekstra",
+  leaveOff: "Udelad noget",
+  without: (name: string) => `Uden ${name.toLowerCase()}`,
+  addToOrder: "Tilføj til bestilling",
+  close: "Luk",
+  decreaseQuantity: "Færre",
+  increaseQuantity: "Flere",
 };
 
 export const messages: Record<Locale, Messages> = { en, da };

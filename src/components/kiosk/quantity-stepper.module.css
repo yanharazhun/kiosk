@@ -1,0 +1,44 @@
+.stepper {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.step {
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2.5px solid var(--color-ink);
+}
+
+.step:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.value {
+  width: 76px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 800;
+}
+
+.stepper[data-size="compact"] {
+  gap: 4px;
+}
+
+.stepper[data-size="compact"] .step {
+  width: 60px;
+  height: 60px;
+  border-width: 2px;
+}
+
+.stepper[data-size="compact"] .value {
+  width: 40px;
+  font-size: 30px;
+}

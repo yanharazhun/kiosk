@@ -1,0 +1,35 @@
+@layer base {
+  /* Chrome / Safari / Edge: a rounded pill thumb on a transparent track.
+     The transparent border + padding-box clip leaves a gap around the thumb. */
+  ::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 4px solid transparent;
+    border-radius: 999px;
+    background: var(--color-track) padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background-color: var(--color-ink-muted);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* Firefox has no ::-webkit-scrollbar; the standard properties are its only option.
+     Chrome 121+ would drop the pseudo-elements above if these applied there too. */
+  @supports not selector(::-webkit-scrollbar) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-track) transparent;
+    }
+  }
+}

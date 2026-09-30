@@ -29,13 +29,12 @@ type KioskContextValue = {
 
 const KioskContext = createContext<KioskContextValue | null>(null);
 
-export function KioskProvider({
-  menu,
-  children,
-}: {
+type KioskProviderProps = {
   menu: Menu;
   children: ReactNode;
-}) {
+};
+
+export function KioskProvider({ menu, children }: KioskProviderProps) {
   const [state, dispatch] = useReducer(orderReducer, initialOrderState);
   const router = useRouter();
 
