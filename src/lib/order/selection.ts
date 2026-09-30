@@ -145,10 +145,10 @@ export function selectionReducer(
   }
 }
 
-export function unitPriceMinor(product: MenuProduct, selection: Selection): number {
+export function unitPriceMinor(product: MenuProduct, picked: Selection["picked"]): number {
   const optionsMinor = product.groups
     .flatMap((group) => {
-      const picks = pickedIn(selection, group.id);
+      const picks = picked[group.id] ?? {};
       return group.options.map(
         (option) => option.priceDeltaMinor * (picks[option.productId] ?? 0),
       );
