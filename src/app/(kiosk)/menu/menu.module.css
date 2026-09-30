@@ -64,15 +64,17 @@
 .content {
   flex-grow: 1;
   min-width: 0;
-  overflow-y: auto;
-  padding: 40px 48px 56px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .heading {
+  flex-shrink: 0;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin-bottom: 32px;
+  padding: 40px 48px 32px;
 }
 
 .title {
@@ -87,6 +89,17 @@
   font-size: 24px;
   font-weight: 600;
   color: var(--color-ink-muted);
+}
+
+/* The gutter is reserved even without overflow, so cards keep their width
+   whether a category scrolls or not. Right padding is reduced by the 14px
+   scrollbar width to keep the grid visually centred. */
+.scroll {
+  flex-grow: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding: 0 34px 56px 48px;
 }
 
 .grid {

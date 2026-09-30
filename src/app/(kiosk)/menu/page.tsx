@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useKiosk } from "@/components/kiosk/kiosk-provider";
 import { ProductCard } from "@/components/kiosk/product-card";
+import { ProductSheet } from "@/components/kiosk/product-sheet";
 import { localize } from "@/lib/i18n/localized-text";
 import styles from "./menu.module.css";
 
@@ -12,6 +13,7 @@ export default function MenuPage() {
   const router = useRouter();
   const { menu, state, t } = useKiosk();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [openProductId, setOpenProductId] = useState<string | null>(null);
 
   useEffect(() => {
     if (state.serviceType === null) router.replace("/mode");
@@ -22,6 +24,9 @@ export default function MenuPage() {
   const active =
     menu.categories.find((category) => category.id === selectedId) ??
     menu.categories[0];
+
+  const openProduct =
+    openProductId === null ? undefined : menu.products[openProductId];
 
   if (!active) {
     return (
@@ -63,19 +68,22 @@ export default function MenuPage() {
             <h1 className={styles.title}>{localize(active.name, state.locale)}</h1>
             <span className={styles.count}>{t.itemCount(active.productIds.length)}</span>
           </div>
-          <div className={styles.grid}>
-            {active.productIds.map((id) => {
-              const product = menu.products[id];
-              if (!product) return null;
-              return (
-                <ProductCard
-                  key={id}
-                  product={product}
-                  locale={state.locale}
-                  photoLabel={t.photo}
-                />
-              );
-            })}
+          <div key={active.id} className={styles.scroll}>
+            <div className={styles.grid}>
+              {active.productIds.map((id) => {
+                const product = menu.products[id];
+                if (!product) return null;
+                return (
+                  <ProductCard
+                    key={id}
+                    product={product}
+                    locale={state.locale}
+                    photoLabel={t.photo}
+                    onSelect={() => setOpenProductId(id)}
+                  />
+                );
+              })}
+            </div>
           </div>
         </section>
       </div>
@@ -84,6 +92,14 @@ export default function MenuPage() {
         <span className={styles.barTitle}>{t.emptyOrder}</span>
         <span className={styles.barHint}>{t.emptyOrderHint}</span>
       </footer>
+
+      {openProduct && (
+        <ProductSheet
+          key={openProduct.id}
+          product={openProduct}
+          onClose={() => setOpenProductId(null)}
+        />
+      )}
     </main>
   );
 }

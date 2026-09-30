@@ -1,6 +1,13 @@
 type IconProps = { size?: number };
 
-export function LogoMark({ size = 48, fill }: IconProps & { fill: string }) {
+type LogoMarkProps = IconProps & { fill: string };
+
+type StrokeIconProps = IconProps & {
+  strokeWidth?: number;
+  children: React.ReactNode;
+};
+
+export function LogoMark({ size = 48, fill }: LogoMarkProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 56 56" aria-hidden="true">
       <path d="M6 26a22 18 0 0 1 44 0z" fill={fill} />
@@ -10,11 +17,7 @@ export function LogoMark({ size = 48, fill }: IconProps & { fill: string }) {
   );
 }
 
-function StrokeIcon({
-  size = 24,
-  strokeWidth = 2,
-  children,
-}: IconProps & { strokeWidth?: number; children: React.ReactNode }) {
+function StrokeIcon({ size = 24, strokeWidth = 2, children }: StrokeIconProps) {
   return (
     <svg
       width={size}
@@ -46,6 +49,31 @@ export function PlusIcon({ size }: IconProps) {
     <StrokeIcon size={size} strokeWidth={2.4}>
       <path d="M12 5v14" />
       <path d="M5 12h14" />
+    </StrokeIcon>
+  );
+}
+
+export function MinusIcon({ size }: IconProps) {
+  return (
+    <StrokeIcon size={size} strokeWidth={2.4}>
+      <path d="M5 12h14" />
+    </StrokeIcon>
+  );
+}
+
+export function CloseIcon({ size }: IconProps) {
+  return (
+    <StrokeIcon size={size} strokeWidth={2.2}>
+      <path d="M6 6l12 12" />
+      <path d="M18 6L6 18" />
+    </StrokeIcon>
+  );
+}
+
+export function CheckIcon({ size }: IconProps) {
+  return (
+    <StrokeIcon size={size} strokeWidth={3}>
+      <path d="M5 12.5l4.5 4.5L19 7.5" />
     </StrokeIcon>
   );
 }
