@@ -1,4 +1,4 @@
-import { MinusIcon, PlusIcon } from "./icons";
+import { MinusIcon, PlusIcon, TrashIcon } from "./icons";
 import styles from "./quantity-stepper.module.css";
 
 type QuantityStepperProps = {
@@ -8,6 +8,8 @@ type QuantityStepperProps = {
   size?: "regular" | "compact";
   decreaseLabel: string;
   increaseLabel: string;
+  /** When set, "−" at 1 becomes a trash button that goes to 0. */
+  removeLabel?: string;
   onChange: (value: number) => void;
 };
 
@@ -20,18 +22,25 @@ export function QuantityStepper({
   size = "regular",
   decreaseLabel,
   increaseLabel,
+  removeLabel,
   onChange,
 }: QuantityStepperProps) {
+  const isRemove = removeLabel !== undefined && value === 1;
+
   return (
     <div className={styles.stepper} data-size={size}>
       <button
         type="button"
         className={styles.step}
-        aria-label={decreaseLabel}
-        disabled={value <= min}
+        aria-label={isRemove ? removeLabel : decreaseLabel}
+        disabled={!isRemove && value <= min}
         onClick={() => onChange(value - 1)}
       >
-        <MinusIcon size={ICON_SIZE[size]} />
+        {isRemove ? (
+          <TrashIcon size={ICON_SIZE[size]} />
+        ) : (
+          <MinusIcon size={ICON_SIZE[size]} />
+        )}
       </button>
       <span className={styles.value} aria-live="polite">
         {value}

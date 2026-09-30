@@ -27,6 +27,18 @@ const en = {
   close: "Close",
   decreaseQuantity: "Decrease quantity",
   increaseQuantity: "Increase quantity",
+  orderSummary: (items: string) => `Your order · ${items}`,
+  reviewOrder: "Review order",
+  yourOrder: "Your order",
+  keepOrdering: "Keep ordering",
+  cartEmpty: "Nothing here yet.",
+  browseMenu: "Browse the menu",
+  edit: "Edit",
+  removeItem: (name: string) => `Remove ${name}`,
+  updateItem: "Update item",
+  totalCount: (items: string) => `Total · ${items}`,
+  pricesIncludeTax: "Prices include tax",
+  continueToPayment: "Continue to payment",
 };
 
 type Messages = typeof en;
@@ -58,6 +70,18 @@ const da: Messages = {
   close: "Luk",
   decreaseQuantity: "Færre",
   increaseQuantity: "Flere",
+  orderSummary: (items: string) => `Din bestilling · ${items}`,
+  reviewOrder: "Se bestilling",
+  yourOrder: "Din bestilling",
+  keepOrdering: "Bestil mere",
+  cartEmpty: "Her er intet endnu.",
+  browseMenu: "Se menuen",
+  edit: "Rediger",
+  removeItem: (name: string) => `Fjern ${name}`,
+  updateItem: "Opdater vare",
+  totalCount: (items: string) => `I alt · ${items}`,
+  pricesIncludeTax: "Priserne er inkl. moms",
+  continueToPayment: "Fortsæt til betaling",
 };
 
 export const messages: Record<Locale, Messages> = { en, da };

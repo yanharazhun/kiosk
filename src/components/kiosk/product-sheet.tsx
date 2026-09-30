@@ -3,8 +3,14 @@
 import Image from "next/image";
 import { localize } from "@/lib/i18n/localized-text";
 import type { MenuProduct } from "@/lib/menu/types";
+import type { NewCartItem } from "@/lib/order/cart";
 import { formatPrice } from "@/lib/money";
-import { isGroupFull, MAX_QUANTITY, pickedIn } from "@/lib/order/selection";
+import {
+  isGroupFull,
+  MAX_QUANTITY,
+  pickedIn,
+  type Selection,
+} from "@/lib/order/selection";
 import { CloseIcon } from "./icons";
 import { useKiosk } from "./kiosk-provider";
 import { OptionGroup } from "./option-group";
@@ -14,10 +20,19 @@ import styles from "./product-sheet.module.css";
 
 type ProductSheetProps = {
   product: MenuProduct;
+  initialSelection?: Selection;
+  submitLabel?: string;
   onClose: () => void;
+  onSubmit: (item: NewCartItem) => void;
 };
 
-export function ProductSheet({ product, onClose }: ProductSheetProps) {
+export function ProductSheet({
+  product,
+  initialSelection,
+  submitLabel,
+  onClose,
+  onSubmit,
+}: ProductSheetProps) {
   const { state, t } = useKiosk();
   const {
     selection,
@@ -27,11 +42,12 @@ export function ProductSheet({ product, onClose }: ProductSheetProps) {
     removeGroups,
     isComplete,
     totalMinor,
+    toCartItem,
     toggleMeal,
     toggleOption,
     setOptionQuantity,
     setQuantity,
-  } = useProductSelection(product);
+  } = useProductSelection(product, initialSelection);
 
   const locale = state.locale;
   const name = localize(product.name, locale);
@@ -176,9 +192,9 @@ export function ProductSheet({ product, onClose }: ProductSheetProps) {
             type="button"
             className={styles.submit}
             disabled={!isComplete}
-            onClick={onClose}
+            onClick={() => onSubmit(toCartItem())}
           >
-            <span>{t.addToOrder}</span>
+            <span>{submitLabel ?? t.addToOrder}</span>
             <span>{formatPrice(totalMinor, locale)}</span>
           </button>
         </div>

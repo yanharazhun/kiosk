@@ -78,6 +78,27 @@ export function CheckIcon({ size }: IconProps) {
   );
 }
 
+export function TrashIcon({ size }: IconProps) {
+  return (
+    <StrokeIcon size={size}>
+      <path d="M4 7h16" />
+      <path d="M10 11v6" />
+      <path d="M14 11v6" />
+      <path d="M6 7l1 13h10l1-13" />
+      <path d="M9 7V4h6v3" />
+    </StrokeIcon>
+  );
+}
+
+export function ArrowLeftIcon({ size }: IconProps) {
+  return (
+    <StrokeIcon size={size}>
+      <path d="M19 12H5" />
+      <path d="M11 6l-6 6 6 6" />
+    </StrokeIcon>
+  );
+}
+
 export function TrayIcon({ size }: IconProps) {
   return (
     <StrokeIcon size={size} strokeWidth={1.4}>

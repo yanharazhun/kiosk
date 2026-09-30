@@ -1,17 +1,21 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ArrowRightIcon } from "@/components/kiosk/icons";
 import { useKiosk } from "@/components/kiosk/kiosk-provider";
 import { ProductCard } from "@/components/kiosk/product-card";
 import { ProductSheet } from "@/components/kiosk/product-sheet";
 import { localize } from "@/lib/i18n/localized-text";
+import { formatPrice } from "@/lib/money";
+import { cartSummary } from "@/lib/order/cart";
 import styles from "./menu.module.css";
 
 export default function MenuPage() {
   const router = useRouter();
-  const { menu, state, t } = useKiosk();
+  const { menu, state, dispatch, t } = useKiosk();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [openProductId, setOpenProductId] = useState<string | null>(null);
 
@@ -27,6 +31,7 @@ export default function MenuPage() {
 
   const openProduct =
     openProductId === null ? undefined : menu.products[openProductId];
+  const summary = cartSummary(menu, state.items);
 
   if (!active) {
     return (
@@ -89,8 +94,29 @@ export default function MenuPage() {
       </div>
 
       <footer className={styles.bar}>
-        <span className={styles.barTitle}>{t.emptyOrder}</span>
-        <span className={styles.barHint}>{t.emptyOrderHint}</span>
+        {summary.count === 0 ? (
+          <div className={styles.barText}>
+            <span className={styles.barTitle}>{t.emptyOrder}</span>
+            <span className={styles.barHint}>{t.emptyOrderHint}</span>
+          </div>
+        ) : (
+          <>
+            <div className={styles.barText}>
+              <span className={styles.barLabel}>
+                {t.orderSummary(t.itemCount(summary.count))}
+              </span>
+              <span className={styles.barTotal}>
+                {formatPrice(summary.totalMinor, state.locale)}
+              </span>
+            </div>
+            <Link href="/cart" className={styles.review}>
+              <span>{t.reviewOrder}</span>
+              <span className={styles.reviewIcon}>
+                <ArrowRightIcon size={40} />
+              </span>
+            </Link>
+          </>
+        )}
       </footer>
 
       {openProduct && (
@@ -98,6 +124,10 @@ export default function MenuPage() {
           key={openProduct.id}
           product={openProduct}
           onClose={() => setOpenProductId(null)}
+          onSubmit={(item) => {
+            dispatch({ type: "ADD_ITEM", item });
+            setOpenProductId(null);
+          }}
         />
       )}
     </main>
