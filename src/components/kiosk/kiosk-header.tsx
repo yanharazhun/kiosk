@@ -11,7 +11,11 @@ export function KioskHeader() {
   const pathname = usePathname();
   const { state, dispatch, t, resetOrder } = useKiosk();
   const isWelcome = pathname === "/";
-  const showServiceType = state.serviceType !== null && pathname !== "/mode";
+  // During card payment, leaving would strand the order in PENDING_PAYMENT (its own
+  // Cancel is the way out); on the final screen the order is placed and Done resets.
+  const isLocked = pathname === "/pay/card" || pathname === "/done";
+  const showServiceType = state.serviceType !== null && pathname !== "/mode" && !isLocked;
+  const showStartOver = !isWelcome && !isLocked;
 
   return (
     <header className={styles.header} data-tone={isWelcome ? "brand" : "plain"}>
@@ -31,7 +35,7 @@ export function KioskHeader() {
           </Link>
         )}
 
-        {!isWelcome && (
+        {showStartOver && (
           <button type="button" className={styles.outline} onClick={resetOrder}>
             {t.startOver}
           </button>

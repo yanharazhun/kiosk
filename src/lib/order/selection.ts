@@ -117,6 +117,16 @@ function setOptionQuantity(
   return setPick(picks, option.productId, next);
 }
 
+/** `undefined` picks mean "nothing changed": keep the same state object so React skips the re-render. */
+function withGroupPicks(
+  state: Selection,
+  group: MenuGroup,
+  picks: GroupPicks | undefined,
+): Selection {
+  if (!picks) return state;
+  return { ...state, picked: { ...state.picked, [group.id]: picks } };
+}
+
 export function selectionReducer(
   state: Selection,
   action: SelectionAction,
@@ -129,14 +139,17 @@ export function selectionReducer(
         picked: withDefaults(state.picked, action.groups),
       };
     case "TOGGLE_OPTION":
-    case "SET_OPTION_QUANTITY": {
-      const picks =
-        action.type === "TOGGLE_OPTION"
-          ? toggleOption(state, action.group, action.productId)
-          : setOptionQuantity(state, action.group, action.option, action.quantity);
-      if (!picks) return state;
-      return { ...state, picked: { ...state.picked, [action.group.id]: picks } };
-    }
+      return withGroupPicks(
+        state,
+        action.group,
+        toggleOption(state, action.group, action.productId),
+      );
+    case "SET_OPTION_QUANTITY":
+      return withGroupPicks(
+        state,
+        action.group,
+        setOptionQuantity(state, action.group, action.option, action.quantity),
+      );
     case "SET_QUANTITY":
       return {
         ...state,

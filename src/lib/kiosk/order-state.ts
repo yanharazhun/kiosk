@@ -7,12 +7,14 @@ import {
   type CartItem,
   type NewCartItem,
 } from "@/lib/order/cart";
+import type { PlacedOrder } from "@/lib/order/types";
 
 export type OrderState = {
   locale: Locale;
   serviceType: ServiceType | null;
   items: CartItem[];
   lastItemId: number;
+  placedOrder: PlacedOrder | null;
 };
 
 export type OrderAction =
@@ -21,6 +23,8 @@ export type OrderAction =
   | { type: "ADD_ITEM"; item: NewCartItem }
   | { type: "UPDATE_ITEM"; id: string; item: NewCartItem }
   | { type: "SET_ITEM_QUANTITY"; id: string; quantity: number }
+  | { type: "ORDER_PLACED"; order: PlacedOrder }
+  | { type: "ORDER_CANCELLED" }
   | { type: "RESET" };
 
 export const initialOrderState: OrderState = {
@@ -28,6 +32,7 @@ export const initialOrderState: OrderState = {
   serviceType: null,
   items: [],
   lastItemId: 0,
+  placedOrder: null,
 };
 
 export function orderReducer(state: OrderState, action: OrderAction): OrderState {
@@ -51,6 +56,10 @@ export function orderReducer(state: OrderState, action: OrderAction): OrderState
         ...state,
         items: setItemQuantity(state.items, action.id, action.quantity),
       };
+    case "ORDER_PLACED":
+      return { ...state, placedOrder: action.order };
+    case "ORDER_CANCELLED":
+      return { ...state, placedOrder: null };
     case "RESET":
       return initialOrderState;
   }
