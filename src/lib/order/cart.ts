@@ -1,5 +1,5 @@
 import type { LocalizedText } from "@/lib/i18n/localized-text";
-import type { Menu, MenuProduct } from "@/lib/menu/types";
+import type { Menu, MenuGroup, MenuProduct } from "@/lib/menu/types";
 import {
   MAX_QUANTITY,
   orderedProduct,
@@ -122,6 +122,12 @@ export type LineDetail = {
 
 const DETAIL_ORDER: Record<LineDetail["kind"], number> = { choice: 0, add: 1, remove: 2 };
 
+function detailKind(group: MenuGroup): LineDetail["kind"] {
+  if (group.kind === "REMOVE") return "remove";
+  if (group.minSelect > 0) return "choice";
+  return "add";
+}
+
 /** What was chosen for a line, for the detail text under its name:
  *  required choices (drink, side) first, then extras, then removals. */
 export function lineDetails(menu: Menu, item: CartItem): LineDetail[] {
@@ -131,8 +137,7 @@ export function lineDetails(menu: Menu, item: CartItem): LineDetail[] {
   return product.groups
     .flatMap((group) => {
       const picks = item.picks[group.id] ?? {};
-      const kind: LineDetail["kind"] =
-        group.kind === "REMOVE" ? "remove" : group.minSelect > 0 ? "choice" : "add";
+      const kind = detailKind(group);
       return group.options
         .filter((option) => picks[option.productId])
         .map((option) => ({

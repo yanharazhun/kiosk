@@ -99,6 +99,37 @@ export function ArrowLeftIcon({ size }: IconProps) {
   );
 }
 
+export function ArrowDownIcon({ size }: IconProps) {
+  return (
+    <StrokeIcon size={size}>
+      <path d="M12 4v16" />
+      <path d="M6 14l6 6 6-6" />
+    </StrokeIcon>
+  );
+}
+
+export function CardIcon({ size }: IconProps) {
+  return (
+    <StrokeIcon size={size} strokeWidth={1.5}>
+      <rect x="2.5" y="6" width="15" height="11" rx="2" />
+      <path d="M2.5 10h15" />
+      <path d="M20 8.5a5 5 0 0 1 0 7" />
+      <path d="M22 6.5a8 8 0 0 1 0 11" />
+    </StrokeIcon>
+  );
+}
+
+export function CashIcon({ size }: IconProps) {
+  return (
+    <StrokeIcon size={size} strokeWidth={1.5}>
+      <rect x="2.5" y="6.5" width="19" height="11" rx="2" />
+      <circle cx="12" cy="12" r="2.5" />
+      <path d="M6 12h.01" />
+      <path d="M18 12h.01" />
+    </StrokeIcon>
+  );
+}
+
 export function TrayIcon({ size }: IconProps) {
   return (
     <StrokeIcon size={size} strokeWidth={1.4}>

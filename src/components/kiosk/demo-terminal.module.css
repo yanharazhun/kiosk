@@ -1,0 +1,99 @@
+/* Deliberately not using kiosk tokens or fonts: this is a dev tool, sized in
+   real screen pixels (it lives outside the scaled kiosk frame). */
+.panel {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1000;
+  width: 260px;
+  overflow: hidden;
+  border: 1px solid #3c3c3c;
+  border-radius: 6px;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  font: 12px/1.5 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.4);
+}
+
+.titleBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid #3c3c3c;
+  background: #2d2d2d;
+  color: #cccccc;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6a6a6a;
+}
+
+.dot[data-active="true"] {
+  background: #4ec9b0;
+}
+
+.badge {
+  margin-left: auto;
+  padding: 0 6px;
+  border-radius: 3px;
+  background: #3c3c3c;
+  color: #9cdcfe;
+  font-size: 11px;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 12px;
+  padding: 10px;
+}
+
+.fields dt {
+  color: #808080;
+}
+
+.fields dd {
+  color: #ce9178;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 10px 10px;
+}
+
+.button {
+  flex: 1;
+  padding: 5px 0;
+  border: 1px solid;
+  border-radius: 3px;
+  background: transparent;
+  font: inherit;
+  text-align: center;
+}
+
+.button[data-variant="approve"] {
+  border-color: #4ec9b0;
+  color: #4ec9b0;
+}
+
+.button[data-variant="decline"] {
+  border-color: #f48771;
+  color: #f48771;
+}
+
+.button:not(:disabled):hover {
+  background: #2a2d2e;
+}
+
+.button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
