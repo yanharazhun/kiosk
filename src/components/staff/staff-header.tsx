@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { LogoMark } from "@/components/kiosk/icons";
+import { useAppEvents } from "@/components/realtime/use-app-events";
 import { locales, type Locale } from "@/lib/i18n/locale";
 import { staffMessages } from "@/lib/i18n/staff-messages";
 import { setStaffLocale } from "@/lib/staff/actions";
@@ -31,8 +32,13 @@ function formatClock(now: number | null): string {
 export function StaffHeader({ locale }: StaffHeaderProps) {
   const t = staffMessages[locale];
   const pathname = usePathname();
+  const router = useRouter();
   const now = useNow();
   const [isPending, startTransition] = useTransition();
+  const connection = useAppEvents({
+    onEvent: () => router.refresh(),
+    onReconnect: () => router.refresh(),
+  });
 
   return (
     <header className={styles.header}>
@@ -56,6 +62,9 @@ export function StaffHeader({ locale }: StaffHeaderProps) {
       </nav>
 
       <div className={styles.side}>
+        <span className={styles.connection} data-status={connection}>
+          {t.connection[connection]}
+        </span>
         <div className={styles.locales} role="group" aria-label={t.language}>
           {locales.map((option) => (
             <button

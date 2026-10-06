@@ -1,6 +1,7 @@
 import "server-only";
 import type { OrderStatus } from "@/generated/prisma/enums";
 import { db } from "@/lib/db";
+import { publish } from "@/lib/events/bus";
 import { STATUS_TIMESTAMP, type StaffTarget } from "./transitions";
 
 // Compare-and-set transitions (doc 16): the WHERE on the current status makes
@@ -15,7 +16,9 @@ export async function transitionOrder(
     where: { id: orderId, status: from },
     data: { status: to, [STATUS_TIMESTAMP[to]]: new Date() },
   });
-  return count === 1;
+  if (count === 0) return false;
+  publish("orders-changed");
+  return true;
 }
 
 export function markPaid(orderId: string): Promise<boolean> {
