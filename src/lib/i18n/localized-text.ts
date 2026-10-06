@@ -8,6 +8,14 @@ export const localizedTextSchema = z.object({
 
 export type LocalizedText = z.infer<typeof localizedTextSchema>;
 
+export function parseLocalizedText(value: unknown, context: string): LocalizedText {
+  const result = localizedTextSchema.safeParse(value);
+  if (!result.success) {
+    throw new Error(`Invalid localized text in ${context}: ${result.error.message}`);
+  }
+  return result.data;
+}
+
 export function localize(text: LocalizedText, locale: Locale): string {
   return text[locale] ?? text.en;
 }
