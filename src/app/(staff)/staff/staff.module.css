@@ -1,0 +1,22 @@
+.app {
+  --staff-bg: #141210;
+  --staff-panel: #1d1a16;
+  --staff-card: #27231e;
+  --staff-line: #3a342c;
+  --staff-text: #f5ede0;
+  --staff-muted: #a89f92;
+
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--staff-bg);
+  color: var(--staff-text);
+  font-family: var(--font-sans);
+}
+
+.main {
+  flex-grow: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}

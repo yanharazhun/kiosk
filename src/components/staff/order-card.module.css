@@ -1,0 +1,120 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--staff-line);
+  border-top: 4px solid var(--staff-line);
+  background: var(--staff-card);
+}
+
+.card[data-status="PENDING_PAYMENT"] {
+  border-top-color: var(--color-mint);
+}
+
+.card[data-status="PAID"] {
+  border-top-color: var(--color-accent);
+}
+
+.card[data-status="PREPARING"] {
+  border-top-color: var(--color-brand);
+}
+
+.card[data-status="READY"] {
+  border-top-color: #4ec9b0;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.number {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.elapsed {
+  color: var(--staff-muted);
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.meta {
+  color: var(--staff-muted);
+  font-size: 14px;
+}
+
+.payment {
+  color: var(--staff-text);
+  font-weight: 600;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+  border-top: 1px solid var(--staff-line);
+  border-bottom: 1px solid var(--staff-line);
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.itemName {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.modifier {
+  padding-left: 22px;
+  color: var(--staff-muted);
+  font-size: 15px;
+}
+
+.modifier[data-kind="REMOVE"] {
+  color: #f48771;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.primary,
+.secondary {
+  min-height: 52px;
+  padding: 0 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.primary {
+  flex-grow: 1;
+  background: var(--staff-text);
+  color: var(--staff-bg);
+}
+
+.secondary {
+  border: 1px solid var(--staff-line);
+  color: var(--staff-muted);
+}
+
+.primary:disabled,
+.secondary:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
