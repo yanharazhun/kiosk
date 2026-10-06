@@ -1,9 +1,13 @@
 "use server";
 
+import { refresh } from "next/cache";
+import { cookies } from "next/headers";
 import { z } from "zod";
 import { db } from "@/lib/db";
+import { locales } from "@/lib/i18n/locale";
 import { transitionOrder } from "@/lib/order/order-status";
 import { canStaffTransition, type StaffTarget } from "@/lib/order/transitions";
+import { STAFF_LOCALE_COOKIE } from "./locale";
 
 export type StaffActionResult =
   | { ok: true }
@@ -31,6 +35,7 @@ export async function changeOrderStatus(input: unknown): Promise<StaffActionResu
     where: { id: orderId },
     select: { status: true, paymentMethod: true },
   });
+  refresh();
   if (!order || !canStaffTransition(order.status, to, order.paymentMethod)) {
     return { ok: false, reason: "not_allowed" };
   }
@@ -53,5 +58,16 @@ export async function setProductAvailability(input: unknown): Promise<StaffActio
     where: { id: productId, deletedAt: null },
     data: { isAvailable },
   });
+  refresh();
   return count === 1 ? { ok: true } : { ok: false, reason: "not_allowed" };
+}
+
+export async function setStaffLocale(input: unknown): Promise<void> {
+  const parsed = z.enum(locales).safeParse(input);
+  if (!parsed.success) return;
+  (await cookies()).set(STAFF_LOCALE_COOKIE, parsed.data, {
+    path: "/staff",
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+  });
 }
