@@ -87,3 +87,38 @@
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
+
+.connection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--staff-muted);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.connection::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--staff-muted);
+}
+
+.connection[data-status="live"] {
+  color: #4ec9b0;
+}
+
+.connection[data-status="live"]::before {
+  background: #4ec9b0;
+}
+
+.connection[data-status="offline"] {
+  color: #f48771;
+}
+
+.connection[data-status="offline"]::before {
+  background: #f48771;
+}

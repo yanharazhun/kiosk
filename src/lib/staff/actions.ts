@@ -4,6 +4,7 @@ import { refresh } from "next/cache";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { db } from "@/lib/db";
+import { publish } from "@/lib/events/bus";
 import { locales } from "@/lib/i18n/locale";
 import { transitionOrder } from "@/lib/order/order-status";
 import { canStaffTransition, type StaffTarget } from "@/lib/order/transitions";
@@ -59,7 +60,9 @@ export async function setProductAvailability(input: unknown): Promise<StaffActio
     data: { isAvailable },
   });
   refresh();
-  return count === 1 ? { ok: true } : { ok: false, reason: "not_allowed" };
+  if (count === 0) return { ok: false, reason: "not_allowed" };
+  publish("menu-changed");
+  return { ok: true };
 }
 
 export async function setStaffLocale(input: unknown): Promise<void> {

@@ -2,6 +2,7 @@ import "server-only";
 import { z } from "zod";
 import type { Prisma } from "@/generated/prisma/client";
 import { db } from "@/lib/db";
+import { publish } from "@/lib/events/bus";
 import { locales } from "@/lib/i18n/locale";
 import { getMenu } from "@/lib/menu/get-menu";
 import type { Menu } from "@/lib/menu/types";
@@ -126,5 +127,6 @@ export async function placeOrder(input: unknown): Promise<PlaceOrderResult> {
     });
   });
 
+  if (order.paymentMethod === "COUNTER") publish("orders-changed");
   return { ok: true, order };
 }
