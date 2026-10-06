@@ -1,18 +1,7 @@
 import "server-only";
 import { db } from "@/lib/db";
-import {
-  localizedTextSchema,
-  type LocalizedText,
-} from "@/lib/i18n/localized-text";
+import { parseLocalizedText as parseText } from "@/lib/i18n/localized-text";
 import type { Menu, MenuCategory, MenuGroup, MenuProduct } from "./types";
-
-function parseText(value: unknown, context: string): LocalizedText {
-  const result = localizedTextSchema.safeParse(value);
-  if (!result.success) {
-    throw new Error(`Invalid localized text in ${context}: ${result.error.message}`);
-  }
-  return result.data;
-}
 
 function canBeSatisfied(group: MenuGroup): boolean {
   const capacity = group.options.reduce(
