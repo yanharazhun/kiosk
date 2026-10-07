@@ -12,10 +12,11 @@
     "db:down": "docker compose down",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
+    "db:setup": "prisma migrate deploy && prisma db seed",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
     "db:seed": "prisma db seed",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset && prisma db seed"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.1",
