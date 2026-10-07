@@ -1,9 +1,11 @@
 import "server-only";
+import { requireStaff } from "@/lib/auth/session";
 import { db } from "@/lib/db";
 import { parseLocalizedText } from "@/lib/i18n/localized-text";
 import type { StaffOrders } from "./types";
 
 export async function getStaffOrders(): Promise<StaffOrders> {
+  await requireStaff();
   const rows = await db.order.findMany({
     where: {
       OR: [
