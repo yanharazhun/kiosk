@@ -122,3 +122,25 @@
 .connection[data-status="offline"]::before {
   background: #f48771;
 }
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 20px;
+  border-left: 1px solid var(--staff-line);
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.logout {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--staff-line);
+  color: var(--staff-muted);
+  font-size: 13px;
+  font-weight: 700;
+}

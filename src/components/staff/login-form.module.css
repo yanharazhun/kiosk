@@ -1,0 +1,88 @@
+.page {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.card {
+  width: min(400px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px solid var(--staff-line);
+  background: var(--staff-panel);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brandName {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  color: var(--staff-muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.input {
+  height: 48px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--staff-line);
+  background: var(--staff-bg);
+  color: var(--staff-text);
+  font: inherit;
+  font-size: 16px;
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.error {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #4a1f17;
+  color: #f48771;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.submit {
+  height: 52px;
+  border-radius: 12px;
+  background: var(--staff-text);
+  color: var(--staff-bg);
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}

@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { LogoMark } from "@/components/kiosk/icons";
 import { useAppEvents } from "@/components/realtime/use-app-events";
+import { logout } from "@/lib/auth/actions";
 import { locales, type Locale } from "@/lib/i18n/locale";
 import { staffMessages } from "@/lib/i18n/staff-messages";
 import { setStaffLocale } from "@/lib/staff/actions";
@@ -13,6 +14,7 @@ import { useNow } from "./use-now";
 
 type StaffHeaderProps = {
   locale: Locale;
+  userName: string;
 };
 
 const tabs = [
@@ -29,7 +31,7 @@ function formatClock(now: number | null): string {
   }).format(now);
 }
 
-export function StaffHeader({ locale }: StaffHeaderProps) {
+export function StaffHeader({ locale, userName }: StaffHeaderProps) {
   const t = staffMessages[locale];
   const pathname = usePathname();
   const router = useRouter();
@@ -80,6 +82,12 @@ export function StaffHeader({ locale }: StaffHeaderProps) {
           ))}
         </div>
         <span className={styles.clock}>{formatClock(now)}</span>
+        <form action={logout} className={styles.user}>
+          <span className={styles.userName}>{userName}</span>
+          <button type="submit" className={styles.logout}>
+            {t.logOut}
+          </button>
+        </form>
       </div>
     </header>
   );

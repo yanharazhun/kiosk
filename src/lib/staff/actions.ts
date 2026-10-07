@@ -3,6 +3,7 @@
 import { refresh } from "next/cache";
 import { cookies } from "next/headers";
 import { z } from "zod";
+import { requireStaff } from "@/lib/auth/session";
 import { db } from "@/lib/db";
 import { publish } from "@/lib/events/bus";
 import { locales } from "@/lib/i18n/locale";
@@ -28,6 +29,7 @@ const statusSchema = z.object({
 });
 
 export async function changeOrderStatus(input: unknown): Promise<StaffActionResult> {
+  await requireStaff();
   const parsed = statusSchema.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
   const { orderId, to } = parsed.data;
@@ -51,6 +53,7 @@ const availabilitySchema = z.object({
 });
 
 export async function setProductAvailability(input: unknown): Promise<StaffActionResult> {
+  await requireStaff();
   const parsed = availabilitySchema.safeParse(input);
   if (!parsed.success) return { ok: false, reason: "invalid" };
   const { productId, isAvailable } = parsed.data;

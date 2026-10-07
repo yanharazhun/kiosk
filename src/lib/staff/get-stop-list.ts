@@ -1,9 +1,11 @@
 import "server-only";
+import { requireStaff } from "@/lib/auth/session";
 import { db } from "@/lib/db";
 import { parseLocalizedText } from "@/lib/i18n/localized-text";
 import type { StopList, StopListProduct } from "./types";
 
 export async function getStopList(): Promise<StopList> {
+  await requireStaff();
   const rows = await db.product.findMany({
     where: { deletedAt: null },
     orderBy: { id: "asc" },
