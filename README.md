@@ -109,6 +109,7 @@ Deliberate simplifications, documented rather than hidden:
 |--------|--------------|
 | `dev` / `build` / `start` | Next.js dev server / production build / run build |
 | `lint` / `typecheck` | ESLint / TypeScript without emitting |
+| `test` / `test:watch` | Unit tests (Vitest), once / on file changes |
 | `db:up` / `db:down` | Start / stop the Postgres container |
 | `db:setup` | Apply migrations and seed (first run) |
 | `db:migrate` | Create + apply a migration from schema changes |
