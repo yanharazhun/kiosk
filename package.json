@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run --project unit",
+    "test:watch": "vitest --project unit",
+    "test:integration": "vitest run --project integration",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
     "db:generate": "prisma generate",
@@ -16,9 +19,7 @@
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
     "db:seed": "prisma db seed",
-    "db:reset": "prisma migrate reset && prisma db seed",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "db:reset": "prisma migrate reset && prisma db seed"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.1",
@@ -33,10 +34,12 @@
   },
   "devDependencies": {
     "@types/node": "^22",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
+    "pg": "^8.23.1",
     "prisma": "7.10.0",
     "tsx": "^4",
     "typescript": "^5",
