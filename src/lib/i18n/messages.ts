@@ -66,6 +66,11 @@ const en = {
   donePayAtCounter:
     "Show this number at the counter to pay. We start cooking as soon as you do.",
   done: "Done",
+  backToStartIn: (seconds: number) => `Back to the start in ${seconds} s`,
+  stillThere: "Still there?",
+  stillHere: "I'm still here",
+  orderClearedIn: (seconds: number) =>
+    `Your order will be cleared in ${seconds === 1 ? "1 second" : `${seconds} seconds`}.`,
 };
 
 type Messages = typeof en;
@@ -136,6 +141,11 @@ const da: Messages = {
   donePayAtCounter:
     "Vis dette nummer ved disken for at betale. Vi går i gang, så snart du har betalt.",
   done: "Færdig",
+  backToStartIn: (seconds: number) => `Tilbage til start om ${seconds} sek.`,
+  stillThere: "Er du der stadig?",
+  stillHere: "Jeg er her stadig",
+  orderClearedIn: (seconds: number) =>
+    `Din ordre bliver slettet om ${seconds === 1 ? "1 sekund" : `${seconds} sekunder`}.`,
 };
 
 export const messages: Record<Locale, Messages> = { en, da };

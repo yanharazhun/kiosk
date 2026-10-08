@@ -87,7 +87,6 @@ export function KioskProvider({ menu: initialMenu, children }: KioskProviderProp
   useEffect(() => () => inFlight.current?.abort(), []);
 
   const resetOrder = useCallback(() => {
-    dispatch({ type: "RESET" });
     router.replace("/");
   }, [router]);
 

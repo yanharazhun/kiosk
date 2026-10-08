@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { DemoTerminal } from "@/components/kiosk/demo-terminal";
 import { ArrowDownIcon } from "@/components/kiosk/icons";
+import { IdleGuard } from "@/components/kiosk/idle-guard";
 import { useKiosk } from "@/components/kiosk/kiosk-provider";
 import { formatPrice } from "@/lib/money";
 import type { PaymentStatus } from "@/lib/order/types";
@@ -13,7 +14,7 @@ type Phase = "waiting" | "declined" | "timeout" | "error";
 
 export default function CardPaymentPage() {
   const router = useRouter();
-  const { state, dispatch, t } = useKiosk();
+  const { state, dispatch, t, resetOrder } = useKiosk();
   const [phase, setPhase] = useState<Phase>("waiting");
   const [attempt, setAttempt] = useState(0);
 
@@ -67,15 +68,24 @@ export default function CardPaymentPage() {
     setAttempt((value) => value + 1);
   }
 
-  async function cancel() {
+  async function cancelPayment() {
     if (!order) return;
     await fetch("/api/payments/cancel", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ orderId: order.id }),
     }).catch(() => undefined);
+  }
+
+  async function cancel() {
+    await cancelPayment();
     dispatch({ type: "ORDER_CANCELLED" });
     router.replace("/pay");
+  }
+
+  async function abandon() {
+    await cancelPayment();
+    resetOrder();
   }
 
   const titles: Record<Phase, string> = {
@@ -116,6 +126,8 @@ export default function CardPaymentPage() {
         amountMinor={order.totalMinor}
         active={phase === "waiting"}
       />
+
+      <IdleGuard enabled={phase !== "waiting"} onExpire={abandon} />
     </main>
   );
 }

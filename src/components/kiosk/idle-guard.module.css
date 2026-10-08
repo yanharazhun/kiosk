@@ -1,0 +1,108 @@
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 72px;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(29 26 22 / 0.62);
+  cursor: default;
+  animation: fade-in 240ms ease-out;
+}
+
+.dialog {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80px 64px 64px;
+  border-radius: 52px;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  text-align: center;
+  animation: pop-in 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.seconds {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-accent);
+  font-family: var(--font-display);
+  font-size: 104px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.title {
+  margin-top: 56px;
+  font-family: var(--font-display);
+  font-size: 88px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.text {
+  margin-top: 28px;
+  font-size: 34px;
+  line-height: 1.4;
+  color: var(--color-ink-muted);
+}
+
+.actions {
+  margin-top: 72px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 24px;
+}
+
+.leave,
+.stay {
+  height: 128px;
+  padding: 0 40px;
+  border-radius: 999px;
+  font-size: 36px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.leave {
+  border: 2.5px solid var(--color-ink);
+}
+
+.stay {
+  background: var(--color-brand);
+  color: var(--color-surface);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim,
+  .dialog {
+    animation: none;
+  }
+}

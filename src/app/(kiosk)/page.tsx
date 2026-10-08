@@ -1,12 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useLayoutEffect } from "react";
 import { ArrowRightIcon } from "@/components/kiosk/icons";
 import { useKiosk } from "@/components/kiosk/kiosk-provider";
 import styles from "./welcome.module.css";
 
 export default function WelcomePage() {
-  const { t } = useKiosk();
+  const { dispatch, t } = useKiosk();
+
+  useLayoutEffect(() => {
+    dispatch({ type: "RESET" });
+  }, [dispatch]);
 
   return (
     <main className={styles.screen}>
