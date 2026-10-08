@@ -1,10 +1,12 @@
 # Demo Kiosk: self-service ordering
 
+[![CI](https://github.com/yanharazhun/kiosk/actions/workflows/ci.yml/badge.svg)](https://github.com/yanharazhun/kiosk/actions/workflows/ci.yml)
+
 A full-stack portfolio project: a self-service ordering kiosk for a burger restaurant ("Ember & Bun"), with a card payment flow and a staff screen that receives orders in real time.
 
 > **Status: work in progress.** The ordering flow, payment and staff screen work end to end. See [Roadmap](#roadmap) for what is next.
 
-**Stack:** Next.js 16 (App Router, Server Components, Server Actions) · React 19 · TypeScript · CSS Modules · Prisma 7 · PostgreSQL 17 (Docker) · Zod · Argon2
+**Stack:** Next.js 16 (App Router, Server Components, Server Actions) · React 19 · TypeScript · CSS Modules · Prisma 7 · PostgreSQL 17 (Docker) · Zod · Argon2 · Vitest · GitHub Actions
 
 ## What it does
 
@@ -36,6 +38,7 @@ This project therefore does **not** aim to build a full POS. The staff screen is
 - **Real time** with an in-process event bus and SSE; the kiosk refreshes its menu through its own fetch so a failed refresh never loses the customer's cart.
 - **Staff auth without a library**: Argon2 password hashes, database sessions (only a SHA-256 of the token is stored), HttpOnly cookie, brute-force lockout with an atomic counter, role checks in the data access layer and in every Server Action.
 - **Database as the last line of defence**: UUID v7 keys, indexes on every foreign key, CHECK constraints (non-negative prices, valid quantities, JSON shape of translations), soft delete.
+- **Tests where mistakes are costly.** Unit tests for pricing, cart, status rules and the business day (they caught an off-by-one-hour bug on daylight-saving nights). Integration tests run against a real, freshly migrated Postgres, not mocks: concurrent orders get distinct numbers, only one of two simultaneous status changes wins, logins lock after repeated failures. CI runs lint, types, both test suites and a production build on every pull request.
 
 ## Getting started
 
@@ -89,7 +92,8 @@ prisma/             schema, migrations (with hand-written CHECK constraints), se
 ## Roadmap
 
 - [ ] Pickup board (`/board`): order numbers for customers
-- [ ] Tests (unit for pricing and cart rules, end-to-end for the order flow) and CI
+- [x] Unit and integration tests, CI on every pull request
+- [ ] End-to-end tests (Playwright) for the order flow
 - [ ] Product photos
 - [ ] VAT (moms) on the receipt
 - [ ] Idle timeout on the kiosk ("Still there?")
