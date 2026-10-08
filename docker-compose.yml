@@ -1,7 +1,8 @@
+x-database-url: &database-url postgresql://${POSTGRES_USER:-kiosk}:${POSTGRES_PASSWORD:-kiosk}@db:5432/${POSTGRES_DB:-kiosk}?schema=public
+
 services:
   db:
     image: postgres:17-alpine
-    container_name: demo-kiosk-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-kiosk}
@@ -16,6 +17,33 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+
+  migrate:
+    build:
+      context: .
+      target: build
+    command: sh -c "npx prisma migrate deploy && npx prisma db seed"
+    environment:
+      DATABASE_URL: *database-url
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-change-me-admin}
+      SEED_KITCHEN_PASSWORD: ${SEED_KITCHEN_PASSWORD:-change-me-kitchen}
+      SEED_KIOSK_PIN: ${SEED_KIOSK_PIN:-1234}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  app:
+    build:
+      context: .
+      target: runner
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: *database-url
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
 
 volumes:
   pgdata:

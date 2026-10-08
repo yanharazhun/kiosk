@@ -42,6 +42,20 @@ This project therefore does **not** aim to build a full POS. The staff screen is
 
 ## Getting started
 
+### Quick start: Docker only
+
+Requirements: Docker Desktop.
+
+```bash
+docker compose up --build
+```
+
+Open http://localhost:3000 once the `app` container reports *Ready*. Migrations and the demo seed run automatically on start; no `.env` is needed. Stop with `Ctrl+C`, or `docker compose down -v` to also delete the data.
+
+Port taken? `APP_PORT=3001 POSTGRES_PORT=5434 docker compose up --build`.
+
+### Local development
+
 Requirements: Node.js ≥ 22.12 and Docker Desktop.
 
 ```bash
@@ -61,7 +75,7 @@ To start over with a clean database: `npm run db:reset`.
 | Kiosk `/` | none |
 | Staff `/staff` | `kitchen` / `change-me-kitchen` or `admin` / `change-me-admin` |
 
-Passwords come from `.env` (`SEED_*`) at seed time.
+Passwords come from `SEED_*` variables at seed time (`.env` for local development, defaults in `docker-compose.yml` for Docker).
 
 ### Try it
 
@@ -98,7 +112,8 @@ prisma/             schema, migrations (with hand-written CHECK constraints), se
 - [ ] VAT (moms) on the receipt
 - [x] Idle timeout on the kiosk ("Still there?") and auto-return from the final screen
 - [ ] Expire card orders left awaiting payment (e.g. kiosk reloaded mid-payment)
-- [ ] Run everything with one `docker compose up`
+- [x] Run everything with one `docker compose up`
+- [ ] Public demo deployment
 
 ## Demo shortcuts
 
@@ -116,7 +131,7 @@ Deliberate simplifications, documented rather than hidden:
 | `lint` / `typecheck` | ESLint / generate Next route types, then TypeScript without emitting |
 | `test` / `test:watch` | Unit tests (Vitest), once / on file changes |
 | `test:integration` | Integration tests against a fresh `<db>_test` database (Postgres must be running) |
-| `db:up` / `db:down` | Start / stop the Postgres container |
+| `db:up` / `db:down` | Start only the Postgres container for local development / stop all containers |
 | `db:setup` | Apply migrations and seed (first run) |
 | `db:migrate` | Create + apply a migration from schema changes |
 | `db:seed` | Seed the demo menu and users |

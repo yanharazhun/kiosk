@@ -326,7 +326,7 @@ const productGroups = [
   })),
 ];
 
-async function seedUsers() {
+async function seedUsers(tx: Prisma.TransactionClient) {
   const kioskPin = requireEnv("SEED_KIOSK_PIN");
   if (!/^\d{4,8}$/.test(kioskPin)) {
     throw new Error("SEED_KIOSK_PIN must be 4 to 8 digits");
@@ -354,7 +354,7 @@ async function seedUsers() {
   ];
 
   for (const { secret, ...user } of users) {
-    await db.user.create({
+    await tx.user.create({
       data: { ...user, secretHash: await hash(secret) },
     });
   }
@@ -436,8 +436,18 @@ async function seedMenu(tx: Prisma.TransactionClient) {
 }
 
 async function main() {
-  await seedUsers();
-  await db.$transaction(seedMenu, { timeout: 30_000 });
+  if ((await db.user.count()) > 0) {
+    console.log("Database already seeded, skipping");
+    return;
+  }
+
+  await db.$transaction(
+    async (tx) => {
+      await seedUsers(tx);
+      await seedMenu(tx);
+    },
+    { timeout: 30_000 },
+  );
 }
 
 main()
