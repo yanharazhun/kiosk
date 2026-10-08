@@ -112,7 +112,7 @@ Deliberate simplifications, documented rather than hidden:
 | Script | What it does |
 |--------|--------------|
 | `dev` / `build` / `start` | Next.js dev server / production build / run build |
-| `lint` / `typecheck` | ESLint / TypeScript without emitting |
+| `lint` / `typecheck` | ESLint / generate Next route types, then TypeScript without emitting |
 | `test` / `test:watch` | Unit tests (Vitest), once / on file changes |
 | `test:integration` | Integration tests against a fresh `<db>_test` database (Postgres must be running) |
 | `db:up` / `db:down` | Start / stop the Postgres container |
