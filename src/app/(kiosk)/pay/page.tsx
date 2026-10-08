@@ -22,7 +22,7 @@ export default function PayPage() {
   const isEmpty = state.items.length === 0;
 
   useEffect(() => {
-    if (state.serviceType === null) router.replace("/mode");
+    if (state.serviceType === null) router.replace("/");
     else if (isEmpty) router.replace("/cart");
   }, [state.serviceType, isEmpty, router]);
 

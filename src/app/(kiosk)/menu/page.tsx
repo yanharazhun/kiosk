@@ -20,7 +20,7 @@ export default function MenuPage() {
   const [openProductId, setOpenProductId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (state.serviceType === null) router.replace("/mode");
+    if (state.serviceType === null) router.replace("/");
   }, [state.serviceType, router]);
 
   if (state.serviceType === null) return null;

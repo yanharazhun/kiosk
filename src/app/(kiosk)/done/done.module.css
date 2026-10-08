@@ -87,8 +87,20 @@
   flex-grow: 1;
 }
 
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.countdown {
+  font-size: 30px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
 .done {
-  align-self: flex-end;
   height: 128px;
   padding: 0 64px;
   border-radius: 999px;

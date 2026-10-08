@@ -96,7 +96,8 @@ prisma/             schema, migrations (with hand-written CHECK constraints), se
 - [ ] End-to-end tests (Playwright) for the order flow
 - [ ] Product photos
 - [ ] VAT (moms) on the receipt
-- [ ] Idle timeout on the kiosk ("Still there?")
+- [x] Idle timeout on the kiosk ("Still there?") and auto-return from the final screen
+- [ ] Expire card orders left awaiting payment (e.g. kiosk reloaded mid-payment)
 - [ ] Run everything with one `docker compose up`
 
 ## Demo shortcuts

@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { CheckIcon } from "@/components/kiosk/icons";
 import { useKiosk } from "@/components/kiosk/kiosk-provider";
+import { useCountdown } from "@/components/kiosk/use-countdown";
+import { KIOSK_TIMEOUTS } from "@/lib/kiosk/timeouts";
 import { formatPrice } from "@/lib/money";
 import styles from "./done.module.css";
 
@@ -11,6 +13,7 @@ export default function DonePage() {
   const router = useRouter();
   const { state, t, resetOrder } = useKiosk();
   const order = state.placedOrder;
+  const secondsLeft = useCountdown(KIOSK_TIMEOUTS.doneScreenMs, resetOrder);
 
   useEffect(() => {
     if (!order) router.replace("/");
@@ -48,9 +51,12 @@ export default function DonePage() {
 
       <div className={styles.spacer} />
 
-      <button type="button" className={styles.done} onClick={resetOrder}>
-        {t.done}
-      </button>
+      <div className={styles.footer}>
+        <span className={styles.countdown}>{t.backToStartIn(secondsLeft)}</span>
+        <button type="button" className={styles.done} onClick={resetOrder}>
+          {t.done}
+        </button>
+      </div>
     </main>
   );
 }
