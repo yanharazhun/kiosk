@@ -29,6 +29,7 @@ model Product {
   mealProduct    Product?               @relation("MealUpgrade", fields: [mealProductId], references: [id], onDelete: SetNull)
   baseProducts   Product[]              @relation("MealUpgrade")
   categories     ProductCategory[]
+  tags           ProductTag[]
   modifierGroups ProductModifierGroup[]
   usedAsModifier Modifier[]
   orderItems     OrderItem[]
@@ -49,6 +50,26 @@ model ProductCategory {
 
   @@id([categoryId, productId])
   @@index([productId])
+}
+
+model Tag {
+  id        String       @id @default(uuid(7)) @db.Uuid
+  name      Json
+  products  ProductTag[]
+  sortOrder Int          @default(0)
+  createdAt DateTime     @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime     @updatedAt @db.Timestamptz(3)
+  deletedAt DateTime?    @db.Timestamptz(3)
+}
+
+model ProductTag {
+  productId String  @db.Uuid
+  tagId     String  @db.Uuid
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([productId, tagId])
+  @@index([tagId])
 }
 
 enum ModifierGroupKind {

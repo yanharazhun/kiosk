@@ -4,11 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowRightIcon } from "@/components/kiosk/icons";
+import { ArrowRightIcon, CloseIcon } from "@/components/kiosk/icons";
 import { useKiosk } from "@/components/kiosk/kiosk-provider";
 import { ProductCard } from "@/components/kiosk/product-card";
 import { ProductSheet } from "@/components/kiosk/product-sheet";
 import { localize } from "@/lib/i18n/localized-text";
+import { matchingProductIds, tagsIn } from "@/lib/menu/filters";
 import { formatPrice } from "@/lib/money";
 import { cartSummary } from "@/lib/order/cart";
 import styles from "./menu.module.css";
@@ -17,6 +18,7 @@ export default function MenuPage() {
   const router = useRouter();
   const { menu, state, dispatch, t } = useKiosk();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [openProductId, setOpenProductId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -41,6 +43,16 @@ export default function MenuPage() {
     );
   }
 
+  const tags = tagsIn(menu, active.productIds);
+  const visibleIds = matchingProductIds(menu, active.productIds, selectedTagIds);
+
+  const toggleTag = (id: string) =>
+    setSelectedTagIds((current) =>
+      current.includes(id)
+        ? current.filter((tagId) => tagId !== id)
+        : [...current, id],
+    );
+
   return (
     <main className={styles.screen}>
       <div className={styles.body}>
@@ -53,7 +65,10 @@ export default function MenuPage() {
                 type="button"
                 className={styles.category}
                 aria-current={category.id === active.id ? "page" : undefined}
-                onClick={() => setSelectedId(category.id)}
+                onClick={() => {
+                  setSelectedId(category.id);
+                  setSelectedTagIds([]);
+                }}
               >
                 {category.imageUrl ? (
                   <Image className={styles.categoryImage} src={category.imageUrl} alt="" width={64} height={64} />
@@ -71,11 +86,42 @@ export default function MenuPage() {
         <section className={styles.content}>
           <div className={styles.heading}>
             <h1 className={styles.title}>{localize(active.name, state.locale)}</h1>
-            <span className={styles.count}>{t.itemCount(active.productIds.length)}</span>
+            <span className={styles.count}>{t.itemCount(visibleIds.length)}</span>
           </div>
+          {tags.length > 0 && (
+            <div className={styles.filters} role="group" aria-label={t.filters}>
+              {tags.map((tag) => {
+                const selected = selectedTagIds.includes(tag.id);
+                return (
+                  <button
+                    key={tag.id}
+                    type="button"
+                    className={styles.filter}
+                    aria-pressed={selected}
+                    onClick={() => toggleTag(tag.id)}
+                  >
+                    <span>{localize(tag.name, state.locale)}</span>
+                    {selected && <CloseIcon size={24} />}
+                  </button>
+                );
+              })}
+            </div>
+          )}
           <div key={active.id} className={styles.scroll}>
+            {visibleIds.length === 0 && (
+              <div className={styles.noMatches}>
+                <p>{t.noMatches}</p>
+                <button
+                  type="button"
+                  className={styles.clearFilters}
+                  onClick={() => setSelectedTagIds([])}
+                >
+                  {t.clearFilters}
+                </button>
+              </div>
+            )}
             <div className={styles.grid}>
-              {active.productIds.map((id) => {
+              {visibleIds.map((id) => {
                 const product = menu.products[id];
                 if (!product) return null;
                 return (

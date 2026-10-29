@@ -46,12 +46,23 @@ const categories = [
 
 type CategoryKey = (typeof categories)[number]["key"];
 
+const tags = [
+  { key: "beef", name: text("Beef", "Oksekød") },
+  { key: "chicken", name: text("Chicken", "Kylling") },
+  { key: "vegetarian", name: text("Vegetarian", "Vegetarisk") },
+  { key: "vegan", name: text("Vegan", "Vegansk") },
+  { key: "spicy", name: text("Spicy", "Stærk") },
+] as const;
+
+type TagKey = (typeof tags)[number]["key"];
+
 type ProductSeed = {
   key: string;
   name: LocalizedText;
   description?: LocalizedText;
   priceMinor: number;
   categories: CategoryKey[];
+  tags?: TagKey[];
 };
 
 const mealDescription = text("With a side and a drink", "Med tilbehør og drik");
@@ -66,6 +77,7 @@ const products: ProductSeed[] = [
     ),
     priceMinor: kr(79),
     categories: ["burgers"],
+    tags: ["beef"],
   },
   {
     key: "double",
@@ -76,6 +88,7 @@ const products: ProductSeed[] = [
     ),
     priceMinor: kr(99),
     categories: ["burgers"],
+    tags: ["beef"],
   },
   {
     key: "bbq",
@@ -86,6 +99,7 @@ const products: ProductSeed[] = [
     ),
     priceMinor: kr(95),
     categories: ["burgers", "new"],
+    tags: ["beef"],
   },
   {
     key: "mushroom",
@@ -96,6 +110,7 @@ const products: ProductSeed[] = [
     ),
     priceMinor: kr(92),
     categories: ["burgers"],
+    tags: ["beef"],
   },
   {
     key: "garden",
@@ -106,6 +121,7 @@ const products: ProductSeed[] = [
     ),
     priceMinor: kr(85),
     categories: ["burgers"],
+    tags: ["vegetarian"],
   },
   {
     key: "crispy",
@@ -116,6 +132,7 @@ const products: ProductSeed[] = [
     ),
     priceMinor: kr(85),
     categories: ["chicken"],
+    tags: ["chicken"],
   },
   {
     key: "hotHoney",
@@ -126,6 +143,7 @@ const products: ProductSeed[] = [
     ),
     priceMinor: kr(92),
     categories: ["chicken", "new"],
+    tags: ["chicken", "spicy"],
   },
   {
     key: "classicMeal",
@@ -133,6 +151,7 @@ const products: ProductSeed[] = [
     description: mealDescription,
     priceMinor: kr(119),
     categories: ["meals"],
+    tags: ["beef"],
   },
   {
     key: "doubleMeal",
@@ -140,6 +159,7 @@ const products: ProductSeed[] = [
     description: mealDescription,
     priceMinor: kr(139),
     categories: ["meals"],
+    tags: ["beef"],
   },
   {
     key: "crispyMeal",
@@ -147,6 +167,7 @@ const products: ProductSeed[] = [
     description: mealDescription,
     priceMinor: kr(125),
     categories: ["meals"],
+    tags: ["chicken"],
   },
   {
     key: "fries",
@@ -154,6 +175,7 @@ const products: ProductSeed[] = [
     description: text("Skin-on, sea salt", "Med skræl og havsalt"),
     priceMinor: kr(35),
     categories: ["sides"],
+    tags: ["vegetarian", "vegan"],
   },
   {
     key: "sweetPotato",
@@ -161,6 +183,7 @@ const products: ProductSeed[] = [
     description: text("With smoked paprika salt", "Med røget paprikasalt"),
     priceMinor: kr(42),
     categories: ["sides"],
+    tags: ["vegetarian", "vegan"],
   },
   {
     key: "onionRings",
@@ -168,6 +191,7 @@ const products: ProductSeed[] = [
     description: text("Beer-battered, with ranch", "I ølbatter med ranch"),
     priceMinor: kr(42),
     categories: ["sides"],
+    tags: ["vegetarian"],
   },
   {
     key: "cola",
@@ -371,6 +395,14 @@ async function seedMenu(tx: Prisma.TransactionClient) {
     categoryIds.set(category.key, created.id);
   }
 
+  const tagIds = new Map<string, string>();
+  for (const [index, tag] of tags.entries()) {
+    const created = await tx.tag.create({
+      data: { name: tag.name, sortOrder: index },
+    });
+    tagIds.set(tag.key, created.id);
+  }
+
   const positionInCategory = new Map<string, number>();
   const productIds = new Map<string, string>();
   for (const product of products) {
@@ -386,6 +418,11 @@ async function seedMenu(tx: Prisma.TransactionClient) {
         description: product.description,
         priceMinor: product.priceMinor,
         categories: { create: links },
+        tags: {
+          create: (product.tags ?? []).map((key) => ({
+            tagId: lookup(tagIds, key),
+          })),
+        },
       },
     });
     productIds.set(product.key, created.id);
@@ -431,7 +468,7 @@ async function seedMenu(tx: Prisma.TransactionClient) {
   });
 
   console.log(
-    `Seeded ${categories.length} categories, ${products.length} products, ${groups.length} modifier groups`,
+    `Seeded ${categories.length} categories, ${tags.length} tags, ${products.length} products, ${groups.length} modifier groups`,
   );
 }
 
