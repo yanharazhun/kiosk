@@ -91,6 +91,54 @@
   color: var(--color-ink-muted);
 }
 
+.filters {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 0 48px 32px;
+}
+
+.filter {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 32px;
+  border: 2px solid var(--color-line);
+  border-radius: 999px;
+  background: var(--color-surface);
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.filter[aria-pressed="true"] {
+  padding-right: 22px;
+  border-color: var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-surface);
+}
+
+.noMatches {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding: 96px 0;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.clearFilters {
+  height: 96px;
+  padding: 0 48px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  font-size: 30px;
+  font-weight: 700;
+}
+
 /* The gutter is reserved even without overflow, so cards keep their width
    whether a category scrolls or not. Right padding is reduced by the 14px
    scrollbar width to keep the grid visually centred. */

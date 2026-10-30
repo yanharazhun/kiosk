@@ -26,6 +26,12 @@ export type MenuProduct = {
   priceMinor: number;
   mealProductId: string | null;
   groups: MenuGroup[];
+  tagIds: string[];
+};
+
+export type MenuTag = {
+  id: string;
+  name: LocalizedText;
 };
 
 export type MenuCategory = {
@@ -38,4 +44,5 @@ export type MenuCategory = {
 export type Menu = {
   categories: MenuCategory[];
   products: Record<string, MenuProduct>;
+  tags: Record<string, MenuTag>;
 };

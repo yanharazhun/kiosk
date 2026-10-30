@@ -58,6 +58,7 @@ export const burger: MenuProduct = {
   priceMinor: 8900,
   mealProductId: "burger-meal",
   groups: [extras, removals],
+  tagIds: [],
 };
 
 export const burgerMeal: MenuProduct = {
@@ -68,6 +69,7 @@ export const burgerMeal: MenuProduct = {
   priceMinor: 12900,
   mealProductId: null,
   groups: [extras, removals, drink, side],
+  tagIds: [],
 };
 
 export const shake: MenuProduct = {
@@ -78,11 +80,13 @@ export const shake: MenuProduct = {
   priceMinor: 4500,
   mealProductId: null,
   groups: [],
+  tagIds: [],
 };
 
 export function makeMenu(products: MenuProduct[] = [burger, burgerMeal, shake]): Menu {
   return {
     categories: [],
     products: Object.fromEntries(products.map((product) => [product.id, product])),
+    tags: {},
   };
 }

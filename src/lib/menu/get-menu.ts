@@ -1,7 +1,7 @@
 import "server-only";
 import { db } from "@/lib/db";
 import { parseLocalizedText as parseText } from "@/lib/i18n/localized-text";
-import type { Menu, MenuCategory, MenuGroup, MenuProduct } from "./types";
+import type { Menu, MenuCategory, MenuGroup, MenuProduct, MenuTag } from "./types";
 
 function canBeSatisfied(group: MenuGroup): boolean {
   const capacity = group.options.reduce(
@@ -39,6 +39,7 @@ function loadRows() {
           orderBy: [{ sortOrder: "asc" }, { groupId: "asc" }],
           select: { groupId: true },
         },
+        tags: { select: { tagId: true } },
       },
     }),
     db.modifierGroup.findMany({
@@ -60,11 +61,16 @@ function loadRows() {
         },
       },
     }),
+    db.tag.findMany({
+      where: { deletedAt: null },
+      orderBy: [{ sortOrder: "asc" }, { id: "asc" }],
+      select: { id: true, name: true },
+    }),
   ]);
 }
 
 export async function getMenu(): Promise<Menu> {
-  const [categoryRows, productRows, groupRows] = await loadRows();
+  const [categoryRows, productRows, groupRows, tagRows] = await loadRows();
 
   const productNames = new Map(
     productRows.map((row) => [row.id, parseText(row.name, `product ${row.id}`)]),
@@ -88,6 +94,8 @@ export async function getMenu(): Promise<Menu> {
     });
   }
 
+  const activeTagIds = new Set(tagRows.map((row) => row.id));
+
   const orderable = new Map<string, MenuProduct>();
   for (const row of productRows) {
     const groups = row.modifierGroups.flatMap(({ groupId }) => {
@@ -108,6 +116,9 @@ export async function getMenu(): Promise<Menu> {
       priceMinor: row.priceMinor,
       mealProductId: row.mealProductId,
       groups: groups.filter((group) => group.options.length > 0),
+      tagIds: row.tags
+        .map((link) => link.tagId)
+        .filter((id) => activeTagIds.has(id)),
     });
   }
 
@@ -146,5 +157,14 @@ export async function getMenu(): Promise<Menu> {
     }
   }
 
-  return { categories, products };
+  const usedTagIds = new Set(
+    Object.values(products).flatMap((product) => product.tagIds),
+  );
+  const tags: Record<string, MenuTag> = {};
+  for (const row of tagRows) {
+    if (!usedTagIds.has(row.id)) continue;
+    tags[row.id] = { id: row.id, name: parseText(row.name, `tag ${row.id}`) };
+  }
+
+  return { categories, products, tags };
 }
